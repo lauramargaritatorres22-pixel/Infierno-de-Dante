@@ -1,0 +1,18 @@
+<svg viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg" aria-label="Escrito 3 · Imagen 3">
+  <defs>
+    <linearGradient id="g3_3" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#6a0d7a" offset="0%"/>
+      <stop stop-color="#200028" offset="100%"/>
+    </linearGradient>
+    <radialGradient id="g3_3r" cx="65%" cy="25%" r="45%">
+      <stop offset="0%" stop-color="#d94dff" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#d94dff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect fill="url(#g3_3)" width="800" height="540"/>
+  <circle cx="540" cy="120" r="240" fill="url(#g3_3r)"/>
+  <g fill="#a21caf" opacity=".4">
+    <path d="M0 460 C 120 420 200 500 320 460 C 440 420 520 500 640 460 C 740 430 760 480 800 470 L800 540 L0 540 Z"/>
+  </g>
+  <text x="28" y="56" font-family="Georgia,serif" font-size="28" fill="#f0e4fa">Escrito 3 · Imagen 3</text>
+</svg>
