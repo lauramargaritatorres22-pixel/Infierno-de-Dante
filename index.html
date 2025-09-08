@@ -139,47 +139,68 @@
     
   </main>
   <footer><p>© 2025 · Blog Literario La Divina Comedia · Serie de 8 escritos</p></footer>
-  <!-- Contenedor del humo -->
+ <!-- Humo morado flotante (versión visible) -->
 <div class="smoke" id="smoke"></div>
 
 <style>
-.smoke {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-.smoke span {
-  position: absolute;
-  width: 80px; height: 80px;
-  background: radial-gradient(circle, rgba(200,150,255,0.25) 0%, rgba(90,0,120,0) 70%);
-  border-radius: 50%;
-  filter: blur(20px);
-  animation: riseSmoke linear infinite;
-}
-@keyframes riseSmoke {
-  0%   { transform: translateY(100vh) scale(0.5); opacity: 0; }
-  20%  { opacity: 0.4; }
-  80%  { opacity: 0.3; }
-  100% { transform: translateY(-20vh) scale(1.4); opacity: 0; }
-}
+  .smoke{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    /* Súbelo por encima del contenido para que siempre se vea */
+    z-index: 999;
+    overflow: hidden;
+    mix-blend-mode: screen; /* combina mejor sobre fondos oscuros */
+  }
+  .smoke span{
+    position: absolute;
+    width: 120px; height: 120px;            /* más grandes */
+    background: radial-gradient(circle,
+      rgba(210,160,255,0.45) 0%,            /* más opaco para que se note */
+      rgba(90,0,120,0.00) 65%);
+    border-radius: 50%;
+    filter: blur(28px);                      /* más difuso */
+    animation: riseSmoke linear infinite;
+    opacity: .85;
+    will-change: transform, opacity;
+  }
+  @keyframes riseSmoke{
+    0%   { transform: translateY(100vh) translateX(0) scale(.6); opacity: 0; }
+    15%  { opacity: .9; }
+    80%  { opacity: .5; }
+    100% { transform: translateY(-25vh) translateX(-6vw) scale(1.5); opacity: 0; }
+  }
 </style>
 
 <script>
 (function(){
   const container = document.getElementById("smoke");
-  function createSmoke(){
+  if(!container){ console.warn("No existe #smoke"); return; }
+
+  function addSmoke(){
     const s = document.createElement("span");
-    const size = Math.random() * 100 + 60; // entre 60 y 160px
+    const size = 90 + Math.random()*140; // 90–230px
     s.style.width = s.style.height = size + "px";
-    s.style.left = Math.random() * 100 + "vw";
-    s.style.animationDuration = (Math.random() * 20 + 20) + "s";
+    s.style.left = (Math.random()*100) + "vw";
+    s.style.bottom = (-10 + Math.random()*20) + "vh";
+    s.style.animationDuration = (18 + Math.random()*24) + "s"; // 18–42s
+    s.style.animationDelay = (-Math.random()*18) + "s"; // entra ya animado
     container.appendChild(s);
-    setTimeout(()=> s.remove(), 40000); // elimina después de 40s
+    // limpiar después
+    setTimeout(()=> s.remove(), 46000);
   }
-  setInterval(createSmoke, 2000); // crea una nueva cada 2s
+
+  // Batch inicial para que se vea al instante
+  for(let i=0;i<16;i++) addSmoke();
+  // Luego ir creando de a poco
+  const timer = setInterval(addSmoke, 1600);
+
+  // DEBUG opcional: escribe en consola cuántas partículas hay
+  setInterval(()=> {
+    // console.log("Humo:", container.children.length);
+  }, 5000);
 })();
 </script>
+
 </body>
 </html>
