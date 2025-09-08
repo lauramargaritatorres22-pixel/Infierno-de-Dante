@@ -139,68 +139,77 @@
     
   </main>
   <footer><p>© 2025 · Blog Literario La Divina Comedia · Serie de 8 escritos</p></footer>
- <!-- Humo morado flotante (versión visible) -->
-<div class="smoke" id="smoke"></div>
-
+ <!-- Humo morado con CANVAS (robusto) -->
+<canvas id="smokeCanvas"></canvas>
 <style>
-  .smoke{
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    /* Súbelo por encima del contenido para que siempre se vea */
-    z-index: 999;
-    overflow: hidden;
-    mix-blend-mode: screen; /* combina mejor sobre fondos oscuros */
-  }
-  .smoke span{
-    position: absolute;
-    width: 120px; height: 120px;            /* más grandes */
-    background: radial-gradient(circle,
-      rgba(210,160,255,0.45) 0%,            /* más opaco para que se note */
-      rgba(90,0,120,0.00) 65%);
-    border-radius: 50%;
-    filter: blur(28px);                      /* más difuso */
-    animation: riseSmoke linear infinite;
-    opacity: .85;
-    will-change: transform, opacity;
-  }
-  @keyframes riseSmoke{
-    0%   { transform: translateY(100vh) translateX(0) scale(.6); opacity: 0; }
-    15%  { opacity: .9; }
-    80%  { opacity: .5; }
-    100% { transform: translateY(-25vh) translateX(-6vw) scale(1.5); opacity: 0; }
+  /* Siempre visible, encima de todo */
+  #smokeCanvas{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:2147483647;   /* súper-alto */
+    mix-blend-mode:screen; /* se integra bien en fondos oscuros */
   }
 </style>
-
 <script>
 (function(){
-  const container = document.getElementById("smoke");
-  if(!container){ console.warn("No existe #smoke"); return; }
+  const c = document.getElementById('smokeCanvas');
+  if(!c) return;
+  const ctx = c.getContext('2d');
 
-  function addSmoke(){
-    const s = document.createElement("span");
-    const size = 90 + Math.random()*140; // 90–230px
-    s.style.width = s.style.height = size + "px";
-    s.style.left = (Math.random()*100) + "vw";
-    s.style.bottom = (-10 + Math.random()*20) + "vh";
-    s.style.animationDuration = (18 + Math.random()*24) + "s"; // 18–42s
-    s.style.animationDelay = (-Math.random()*18) + "s"; // entra ya animado
-    container.appendChild(s);
-    // limpiar después
-    setTimeout(()=> s.remove(), 46000);
+  let w,h,particles=[];
+  const MAX = 80; // cantidad de nubes
+
+  function resize(){
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    c.width  = Math.floor(innerWidth  * dpr);
+    c.height = Math.floor(innerHeight * dpr);
+    c.style.width  = innerWidth + 'px';
+    c.style.height = innerHeight + 'px';
+    w = c.width; h = c.height;
+  }
+  addEventListener('resize', resize); resize();
+
+  function make(){
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    return {
+      x: Math.random()*w,
+      y: h + Math.random()*h*0.2,
+      r: (30 + Math.random()*120) * dpr,
+      v: (0.3 + Math.random()*0.6) * dpr,  // velocidad vertical
+      drift: (Math.random()-0.5) * 0.4 * dpr, // deriva horizontal
+      a: 0
+    };
   }
 
-  // Batch inicial para que se vea al instante
-  for(let i=0;i<16;i++) addSmoke();
-  // Luego ir creando de a poco
-  const timer = setInterval(addSmoke, 1600);
+  // Partículas iniciales
+  for(let i=0;i<MAX;i++) particles.push(make());
 
-  // DEBUG opcional: escribe en consola cuántas partículas hay
-  setInterval(()=> {
-    // console.log("Humo:", container.children.length);
-  }, 5000);
+  function loop(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of particles){
+      p.y -= p.v;
+      p.x += p.drift;
+      p.a = Math.min(1, p.a + 0.01); // aparición suave
+
+      // Reposicionar cuando sale por arriba
+      if(p.y < -200){
+        const fresh = make();
+        p.x=fresh.x; p.y=fresh.y; p.r=fresh.r; p.v=fresh.v; p.drift=fresh.drift; p.a=0;
+      }
+
+      // Dibujo del “humo” (degradé radial morado)
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+      g.addColorStop(0, `rgba(208,160,255,${0.35*p.a})`);
+      g.addColorStop(1, `rgba(90,0,120,0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
 })();
 </script>
-
 </body>
 </html>
