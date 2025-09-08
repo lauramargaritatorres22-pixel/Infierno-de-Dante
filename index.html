@@ -139,5 +139,47 @@
     
   </main>
   <footer><p>© 2025 · Blog Literario La Divina Comedia · Serie de 8 escritos</p></footer>
+  <!-- Contenedor del humo -->
+<div class="smoke" id="smoke"></div>
+
+<style>
+.smoke {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.smoke span {
+  position: absolute;
+  width: 80px; height: 80px;
+  background: radial-gradient(circle, rgba(200,150,255,0.25) 0%, rgba(90,0,120,0) 70%);
+  border-radius: 50%;
+  filter: blur(20px);
+  animation: riseSmoke linear infinite;
+}
+@keyframes riseSmoke {
+  0%   { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  20%  { opacity: 0.4; }
+  80%  { opacity: 0.3; }
+  100% { transform: translateY(-20vh) scale(1.4); opacity: 0; }
+}
+</style>
+
+<script>
+(function(){
+  const container = document.getElementById("smoke");
+  function createSmoke(){
+    const s = document.createElement("span");
+    const size = Math.random() * 100 + 60; // entre 60 y 160px
+    s.style.width = s.style.height = size + "px";
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDuration = (Math.random() * 20 + 20) + "s";
+    container.appendChild(s);
+    setTimeout(()=> s.remove(), 40000); // elimina después de 40s
+  }
+  setInterval(createSmoke, 2000); // crea una nueva cada 2s
+})();
+</script>
 </body>
 </html>
