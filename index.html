@@ -10,15 +10,15 @@
       --radius:18px; --shadow:0 10px 24px rgba(162,28,175,.25), 0 2px 6px rgba(0,0,0,.15); }
     body{
   margin:0;
-  background-color: #17051b; /* morado oscuro */
+  background-color: #17051b; /* base morada oscura */
   background-image:
     radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-  background-size: 20px 20px; /* tamaño del patrón */
+  background-size: 20px 20px; /* controla la densidad de la textura */
+  background-attachment: fixed;
   color:#eee5f7;
   font-family: Georgia, serif;
   line-height:1.6;
 }
-
     header{ text-align:center; padding:56px 24px 28px; color:white; box-shadow:var(--shadow);
       background: linear-gradient(135deg, #2a0830, #5c1a7a); }
     .brand{ font-size:clamp(28px,4.5vw,56px); margin:0; text-shadow:0 6px 0 rgba(0,0,0,.2); font-weight:700; }
