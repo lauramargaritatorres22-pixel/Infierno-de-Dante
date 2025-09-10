@@ -221,20 +221,51 @@
   loop();
 })();
 </script>
-  <audio id="bg-music" loop>
+  <!-- 🎵 Música de fondo + Botón siempre visible -->
+<audio id="bg-music" loop>
   <source src="music/fondo.mp3" type="audio/mpeg">
+  Tu navegador no soporta audio HTML5.
 </audio>
 
-<button onclick="toggleMusic()">🎵 Música</button>
+<style>
+  #music-toggle{
+    position: fixed;
+    right: 18px; bottom: 18px;
+    z-index: 2147483647;       /* encima de cualquier overlay/canvas */
+    pointer-events: auto;
+    background: rgba(26, 6, 33, .92);
+    color: #fff;
+    border: 3px solid #c77dff;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(0,0,0,.25);
+    cursor: pointer;
+  }
+  #music-toggle:hover{ background: rgba(162, 28, 175, .92); }
+</style>
 
 <script>
-function toggleMusic(){
-  const audio = document.getElementById('bg-music');
-  if(audio.paused){
-    audio.play();
-  } else {
-    audio.pause();
+(function(){
+  // Si tienes un canvas de humo con z-index enorme, asegúrate que no bloquee clics
+  var smoke = document.getElementById('smokeCanvas');
+  if (smoke) smoke.style.pointerEvents = 'none';
+
+  // Crear el botón si no existe
+  if(!document.getElementById('music-toggle')){
+    var btn = document.createElement('button');
+    btn.id = 'music-toggle';
+    btn.type = 'button';
+    btn.textContent = '🎵 Música';
+    document.body.appendChild(btn);
+
+    var audio = document.getElementById('bg-music');
+    btn.addEventListener('click', function(){
+      if(audio.paused){ audio.play(); btn.textContent = '⏸️ Pausar'; }
+      else { audio.pause(); btn.textContent = '🎵 Música'; }
+    });
   }
-}
+})();
+</script>
 </body>
 </html>
