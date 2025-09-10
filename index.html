@@ -47,14 +47,14 @@
     <h1 class="brand">Blog Literario · La Divina Comedia</h1>
     <p class="subtitle">Ensayos argumentativos que permitirán marcar una ruta de Dante.</p>
     <nav>
-      <a href="escrito1.html" target="_blank" rel="noopener">Ensayo I</a>
-      <a href="escrito2.html" target="_blank" rel="noopener">Ensayo II</a>
-      <a href="escrito3.html" target="_blank" rel="noopener">Ensayo III</a>
-      <a href="escrito4.html" target="_blank" rel="noopener">Ensayo IV</a>
-      <a href="escrito5.html" target="_blank" rel="noopener">Ensayo V</a>
-      <a href="escrito6.html" target="_blank" rel="noopener">Ensayo VI</a>
-      <a href="escrito7.html" target="_blank" rel="noopener">Ensayo VII</a>
-      <a href="escrito8.html" target="_blank" rel="noopener">Ensayo VIII</a>
+      <a href="escrito1.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo I</a>
+      <a href="escrito2.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo II</a>
+      <a href="escrito3.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo III</a>
+      <a href="escrito4.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo IV</a>
+      <a href="escrito5.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo V</a>
+      <a href="escrito6.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo VI</a>
+      <a href="escrito7.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo VII</a>
+      <a href="escrito8.html" target="_blank" rel="noopener" class="btn-ensayo">Ensayo VIII</a>
     </nav>
   </header>
   <main class="wrap">
@@ -316,6 +316,112 @@
   }, { once:true });
 
   setLabel();
+})();
+</script>
+<style>
+  /* Botón consistente con tu estética */
+  .btn-ensayo{
+    position: relative;
+    display:inline-block;
+    background: var(--accent, #a21caf);
+    color:#fff; text-decoration:none;
+    border:3px solid var(--accent-2, #c77dff);
+    border-radius:999px; padding:10px 16px; font-weight:800;
+    box-shadow:0 10px 24px rgba(0,0,0,.25);
+    transition: transform .1s ease;
+  }
+  .btn-ensayo:hover{ background: var(--accent-2, #c77dff); }
+  .btn-ensayo:active{ transform: scale(0.98); }
+
+  /* Burst de fuego */
+  .flame-burst{
+    pointer-events:none;
+    position:absolute;
+    left:0; top:0;
+    width:100%; height:100%;
+    transform: translate(-50%,-50%);
+    filter: blur(8px) saturate(1.2);
+    mix-blend-mode: screen;
+    opacity:0;
+    animation: flamePop .8s ease-out forwards;
+  }
+  /* Partículas del burst con múltiples sombras */
+  .flame-burst::before,
+  .flame-burst::after{
+    content:"";
+    position:absolute; inset:0;
+    border-radius:50%;
+  }
+  /* Capa caliente (magenta) */
+  .flame-burst::before{
+    box-shadow:
+      0 0 0 12px rgba(162,28,175,.45),
+      12px -6px 0 8px rgba(199,125,255,.35),
+      -10px 8px 0 10px rgba(122,13,122,.28),
+      20px 16px 0 6px rgba(209,77,255,.25),
+      -18px 14px 0 6px rgba(162,28,175,.25);
+    animation: sparks1 .8s ease-out forwards;
+  }
+  /* Capa profunda (morado oscuro) */
+  .flame-burst::after{
+    box-shadow:
+      0 0 0 16px rgba(58,0,63,.28),
+      -14px -10px 0 10px rgba(106,13,122,.22),
+      16px -12px 0 10px rgba(58,0,63,.2),
+      -22px 6px 0 8px rgba(122,13,122,.18);
+    animation: sparks2 .8s ease-out forwards;
+  }
+
+  @keyframes flamePop{
+    0%{ opacity:.0; transform: translate(-50%,-50%) scale(.6); }
+    15%{ opacity:.95; }
+    100%{ opacity:0; transform: translate(-50%,-50%) scale(1.4); }
+  }
+  @keyframes sparks1{
+    0%{ transform: translate(0,0); }
+    100%{ transform: translate(0,-16px); }
+  }
+  @keyframes sparks2{
+    0%{ transform: translate(0,0) scale(1); }
+    100%{ transform: translate(0,-24px) scale(1.1); }
+  }
+
+  /* Llamas que “lamen” el borde durante un instante */
+  .btn-ensayo.flame-lick{
+    box-shadow:
+      0 0 20px rgba(199,125,255,.6),
+      0 0 60px rgba(162,28,175,.25);
+  }
+</style>
+
+<script>
+(function(){
+  // Selecciona automáticamente links a escritoX.html si no agregaste la clase
+  const ensayoLinks = Array.from(document.querySelectorAll('a.btn-ensayo, a[href^="escrito"][href$=".html"]'));
+
+  ensayoLinks.forEach(a=>{
+    a.style.position = a.style.position || 'relative';
+    a.addEventListener('click', (ev)=>{
+      // Crear burst en el punto de click dentro del botón
+      const rect = a.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
+
+      const burst = document.createElement('span');
+      burst.className = 'flame-burst';
+      burst.style.left = x + 'px';
+      burst.style.top  = y + 'px';
+      a.classList.add('flame-lick');
+      a.appendChild(burst);
+
+      // limpiar después de la animación
+      setTimeout(()=>{
+        a.classList.remove('flame-lick');
+        burst.remove();
+      }, 820);
+      // NO prevenimos la navegación: si es target=_blank, abre y el efecto se ve aquí
+    }, {passive:true});
+  });
 })();
 </script>
 
