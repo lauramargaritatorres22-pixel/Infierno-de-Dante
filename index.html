@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blog Literario · La Divina Comedia</title>
+  <!-- Fuentes estilo medieval -->
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <meta name="description" content="Blog literario con estética 70s morada y ambientación del Infierno de Dante. Serie de 8 escritos.">
   <style>
     :root{ --ink:#eee5f7; --bg:#17051b; --accent:#a21caf; --accent-2:#c77dff; --glow:#d94dff;
@@ -89,7 +91,114 @@ nav { position: relative; z-index: 20; }
   20%  { opacity: .95; }
   100% { opacity: 0;   transform: translate(-50%,-58%) scale(1.2); }
 }
-  
+  /* Contenedor general del ensayo con “papel” morado tenue */
+.medieval {
+  font-family: "EB Garamond", Georgia, serif;
+  color: #f6f0ff;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(162,28,175,.10), rgba(0,0,0,0) 60%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 6px),
+    rgba(23,5,27,.75);
+  border: 4px solid rgba(199,125,255,.35);
+  border-radius: 16px;
+  padding: 22px 22px 28px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35), inset 0 0 0 3px rgba(199,125,255,.15);
+  backdrop-filter: blur(4px);
+}
+
+/* Títulos góticos */
+.medieval h1, .medieval h2, .medieval h3 {
+  font-family: "UnifrakturMaguntia", "IM Fell English", serif;
+  letter-spacing: .5px;
+  color: #e8d5ff;
+  text-shadow: 0 0 6px rgba(90,0,120,.35);
+  margin-top: .2em;
+}
+.medieval h1 { font-size: clamp(34px, 5vw, 58px); }
+.medieval h2 { font-size: clamp(26px, 3.6vw, 40px); }
+.medieval h3 { font-size: clamp(22px, 3vw, 30px); }
+
+/* Capitular (primera letra grande y decorada) */
+.medieval .dropcap::first-letter {
+  float: left;
+  font-family: "IM Fell English", "EB Garamond", serif;
+  font-size: 4.2em;
+  line-height: .85;
+  padding: 0 .16em 0 0;
+  margin-top: .04em;
+  color: #d94dff;
+  text-shadow: 0 0 10px rgba(209,77,255,.25);
+}
+
+/* Párrafos y espaciado */
+.medieval p { font-size: 1.08rem; margin: .75em 0; }
+.medieval p + p { text-indent: 1.2em; }
+
+/* Citas estilo glosa marginal */
+.medieval blockquote {
+  margin: 1.1em 0;
+  padding: .8em 1em;
+  border-left: 6px solid rgba(199,125,255,.45);
+  background: rgba(162,28,175,.10);
+  font-style: italic;
+  color: #ead9ff;
+}
+
+/* Verso (poesía) con letra más grande y serif elegante */
+.medieval .verso {
+  font-family: "IM Fell English", "EB Garamond", serif;
+  font-size: 1.12rem;
+  line-height: 1.7;
+  margin: .6em 0 .6em 1em;
+  white-space: pre-wrap;
+}
+
+/* Rubricación: pequeñas notas o mayúsculas en rojo púrpura */
+.medieval .rubrica {
+  color: #ff6ff2;
+  font-variant: small-caps;
+  letter-spacing: .5px;
+}
+
+/* Separador ornamental (SVG inline como background) */
+.medieval .ornamento {
+  height: 14px;
+  margin: 18px 0;
+  background:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='300' height='14' viewBox='0 0 300 14'>\
+<path d='M5 7 L120 7' stroke='%23c77dff' stroke-width='2' stroke-linecap='round'/>\
+<circle cx='150' cy='7' r='3' fill='%23d94dff'/>\
+<path d='M180 7 L295 7' stroke='%23c77dff' stroke-width='2' stroke-linecap='round'/>\
+</svg>") center/auto no-repeat;
+  opacity:.85;
+}
+
+/* Notas al pie medievales */
+.medieval sup {
+  font-family: "IM Fell English", serif;
+  color:#cbb1db;
+}
+
+/* Imágenes con marco iluminado */
+.medieval figure {
+  margin: 1em 0;
+  border: 3px solid rgba(199,125,255,.35);
+  border-radius: 12px;
+  background: rgba(122,13,122,.12);
+  box-shadow: 0 10px 20px rgba(0,0,0,.35);
+  overflow: hidden;
+}
+.medieval figure img { display: block; width: 100%; height: auto; }
+.medieval figure figcaption {
+  font-style: italic; font-size: .95rem; color: #e9dcff;
+  padding: 8px 10px; background: rgba(162,28,175,.12);
+}
+
+/* Listas estilo manuscrito */
+.medieval ul { list-style: "✦  "; padding-left: 1.2em; }
+.medieval ol { padding-left: 1.2em; }
+
   </style>
 </head>
 <body>
