@@ -39,6 +39,57 @@
     .thumb img{ width:100%; height:auto; display:block; }
     .back{ display:inline-block; margin-top:10px; }
     footer{ text-align:center; padding:26px 16px; color:#cdb6d9; background:linear-gradient(180deg,rgba(162,28,175,.15),rgba(162,28,175,.08)); border-top:4px solid var(--accent-2); }
+
+    /* Asegura que la barra de navegación esté por encima de overlays */
+nav { position: relative; z-index: 20; }
+
+/* Botones con alto contraste y estilo de tu tema */
+.btn-ensayo{
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(180deg, var(--accent, #a21caf), #7e1390);
+  color: #fff !important;
+  text-decoration: none;
+  border: 3px solid var(--accent-2, #c77dff);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 800;
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.35),
+    0 0 0 3px rgba(199,125,255,.15) inset;
+  z-index: 21;                 /* por encima del fondo/overlay */
+  transition: transform .1s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn-ensayo:hover{
+  background: linear-gradient(180deg, var(--accent-2, #c77dff), #9a3fd1);
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.4),
+    0 0 0 3px rgba(199,125,255,.25) inset;
+}
+.btn-ensayo:active{ transform: scale(.98); }
+
+/* Efecto de FUEGO sencillo con pseudo-elemento */
+.btn-ensayo.ignite::after{
+  content:"";
+  position:absolute; left:50%; top:50%;
+  width: 260%; height: 260%;
+  transform: translate(-50%,-50%) scale(.4);
+  pointer-events:none;
+  border-radius: 50%;
+  filter: blur(10px) saturate(1.2);
+  background:
+    radial-gradient(closest-side, rgba(209,77,255,.65), rgba(209,77,255,0) 60%),
+    radial-gradient(closest-side, rgba(162,28,175,.5), rgba(162,28,175,0) 70%),
+    radial-gradient(closest-side, rgba(106,13,122,.35), rgba(106,13,122,0) 80%);
+  mix-blend-mode: screen;
+  animation: flameBurst .7s ease-out forwards;
+}
+@keyframes flameBurst{
+  0%   { opacity: 0;   transform: translate(-50%,-50%) scale(.4); }
+  20%  { opacity: .95; }
+  100% { opacity: 0;   transform: translate(-50%,-58%) scale(1.2); }
+}
+  
   </style>
 </head>
 <body>
@@ -318,108 +369,18 @@
   setLabel();
 })();
 </script>
-<style>
-  /* Botón consistente con tu estética */
-  .btn-ensayo{
-    position: relative;
-    display:inline-block;
-    background: var(--accent, #a21caf);
-    color:#fff; text-decoration:none;
-    border:3px solid var(--accent-2, #c77dff);
-    border-radius:999px; padding:10px 16px; font-weight:800;
-    box-shadow:0 10px 24px rgba(0,0,0,.25);
-    transition: transform .1s ease;
-  }
-  .btn-ensayo:hover{ background: var(--accent-2, #c77dff); }
-  .btn-ensayo:active{ transform: scale(0.98); }
-
-  /* Burst de fuego */
-  .flame-burst{
-    pointer-events:none;
-    position:absolute;
-    left:0; top:0;
-    width:100%; height:100%;
-    transform: translate(-50%,-50%);
-    filter: blur(8px) saturate(1.2);
-    mix-blend-mode: screen;
-    opacity:0;
-    animation: flamePop .8s ease-out forwards;
-  }
-  /* Partículas del burst con múltiples sombras */
-  .flame-burst::before,
-  .flame-burst::after{
-    content:"";
-    position:absolute; inset:0;
-    border-radius:50%;
-  }
-  /* Capa caliente (magenta) */
-  .flame-burst::before{
-    box-shadow:
-      0 0 0 12px rgba(162,28,175,.45),
-      12px -6px 0 8px rgba(199,125,255,.35),
-      -10px 8px 0 10px rgba(122,13,122,.28),
-      20px 16px 0 6px rgba(209,77,255,.25),
-      -18px 14px 0 6px rgba(162,28,175,.25);
-    animation: sparks1 .8s ease-out forwards;
-  }
-  /* Capa profunda (morado oscuro) */
-  .flame-burst::after{
-    box-shadow:
-      0 0 0 16px rgba(58,0,63,.28),
-      -14px -10px 0 10px rgba(106,13,122,.22),
-      16px -12px 0 10px rgba(58,0,63,.2),
-      -22px 6px 0 8px rgba(122,13,122,.18);
-    animation: sparks2 .8s ease-out forwards;
-  }
-
-  @keyframes flamePop{
-    0%{ opacity:.0; transform: translate(-50%,-50%) scale(.6); }
-    15%{ opacity:.95; }
-    100%{ opacity:0; transform: translate(-50%,-50%) scale(1.4); }
-  }
-  @keyframes sparks1{
-    0%{ transform: translate(0,0); }
-    100%{ transform: translate(0,-16px); }
-  }
-  @keyframes sparks2{
-    0%{ transform: translate(0,0) scale(1); }
-    100%{ transform: translate(0,-24px) scale(1.1); }
-  }
-
-  /* Llamas que “lamen” el borde durante un instante */
-  .btn-ensayo.flame-lick{
-    box-shadow:
-      0 0 20px rgba(199,125,255,.6),
-      0 0 60px rgba(162,28,175,.25);
-  }
-</style>
-
 <script>
 (function(){
-  // Selecciona automáticamente links a escritoX.html si no agregaste la clase
-  const ensayoLinks = Array.from(document.querySelectorAll('a.btn-ensayo, a[href^="escrito"][href$=".html"]'));
+  // seguridad por si tienes un overlay/canvas
+  var smoke = document.getElementById('smokeCanvas') || document.getElementById('smoke');
+  if (smoke) smoke.style.pointerEvents = 'none';
 
-  ensayoLinks.forEach(a=>{
-    a.style.position = a.style.position || 'relative';
-    a.addEventListener('click', (ev)=>{
-      // Crear burst en el punto de click dentro del botón
-      const rect = a.getBoundingClientRect();
-      const x = ev.clientX - rect.left;
-      const y = ev.clientY - rect.top;
-
-      const burst = document.createElement('span');
-      burst.className = 'flame-burst';
-      burst.style.left = x + 'px';
-      burst.style.top  = y + 'px';
-      a.classList.add('flame-lick');
-      a.appendChild(burst);
-
-      // limpiar después de la animación
-      setTimeout(()=>{
-        a.classList.remove('flame-lick');
-        burst.remove();
-      }, 820);
-      // NO prevenimos la navegación: si es target=_blank, abre y el efecto se ve aquí
+  var links = document.querySelectorAll('a.btn-ensayo');
+  links.forEach(function(a){
+    a.addEventListener('click', function(){
+      a.classList.add('ignite');
+      setTimeout(function(){ a.classList.remove('ignite'); }, 720);
+      // no prevenimos la navegación: el click sigue su curso
     }, {passive:true});
   });
 })();
