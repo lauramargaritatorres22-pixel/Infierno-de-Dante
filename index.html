@@ -221,5 +221,20 @@
   loop();
 })();
 </script>
+  <audio id="bg-music" loop>
+  <source src="music/fondo.mp3" type="audio/mpeg">
+</audio>
+
+<button onclick="toggleMusic()">🎵 Música</button>
+
+<script>
+function toggleMusic(){
+  const audio = document.getElementById('bg-music');
+  if(audio.paused){
+    audio.play();
+  } else {
+    audio.pause();
+  }
+}
 </body>
 </html>
